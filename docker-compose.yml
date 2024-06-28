@@ -1,9 +1,9 @@
 services:
   db:
-    container_name: postgresdb
+    container_name: lunchlog_db
     image: postgres:latest
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust #  This shouldn't be like that for production purposes
+      POSTGRES_HOST_AUTH_METHOD: trust #  This shouldn't be like that for production purposes
     ports:
       - "5432"
     volumes:
@@ -16,7 +16,7 @@ services:
       - "6379"
   app:
     build: .
-    container_name: django_server
+    container_name: lunchlog_app
     ports:
       - "8000:8000"
     depends_on:
