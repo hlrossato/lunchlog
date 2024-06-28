@@ -5,6 +5,7 @@ __pycache__
 
 # Project
 *.sqlite3
+.env
 
 # OS
 .DS_Store
