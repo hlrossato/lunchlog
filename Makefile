@@ -53,3 +53,7 @@ django-migrate:
 django-shell:
 	@echo "Starting Django shell.."
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py shell_plus
+
+django-run-test:
+	@echo "Starting test $(TEST)"
+	@docker-compose run --workdir=$(PROJECT_PATH) app pytest $(TEST) --cov $(ARGS)
