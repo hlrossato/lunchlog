@@ -1,5 +1,5 @@
 # Docker services
-PROJECT_PATH=/lunchlog/lunchlog
+PROJECT_PATH=/lunchlog/lunchlog/
 PROJECT_NAME=lunchlog
 APP_ALIAS=lunchlog_app
 DB_ALIAS=lunchlog_db
@@ -37,8 +37,8 @@ docker-exec-ssh:
 
 # Django related
 django-create-new-app:
-	@echo "Creating a new app - $(APP_NAME)"
-	@docker-compose run --workdir=$(PROJECT_PATH) app django-admin.py startapp $(APP_NAME)
+	@echo "Creating a new app: $(APP_NAME)"
+	@docker-compose run --workdir=$(PROJECT_PATH) app django-admin startapp $(APP_NAME)
 
 django-createsuperuser:
 	@echo "Creating Django Superuser"
