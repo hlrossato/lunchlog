@@ -1,0 +1,40 @@
+@startuml "LunchLog"
+
+== User Sign Up ==
+
+User -> System: Sign Up
+alt successful case
+    System -> DB: Store user's information
+    DB --> System: User's information stored successfully
+    System --> User: Sign Up Successfully
+else something went wrong
+    System --> User: Sign Up Failure
+end
+
+== User Authentication ==
+
+User -> System: Authentication Request
+alt successful case
+    System --> User: Authenciation Accepted
+else user not found | wrong credentials
+    System --> User: Authentication Failure
+end
+
+== CRUD Operations ==
+participant AsyncJob as async
+participant GooglePlacesAPI as gpAPI
+
+User -> System: Create lunch receipt
+alt successful case
+    System -> DB: Store Receipt information
+    System -> S3: Store Receipt image
+    System -> async: Get information about restaurant
+    async -> gpAPI: Get information about restaurant
+    gpAPI --> async: Information about restaurant
+    async --> System: Information about restaurant
+    System -> DB: Store information about restaurant
+    DB --> System: Restaurant's information stored
+else something went wrong
+    System -> User: Create lunch receipt failure
+end
+@enduml

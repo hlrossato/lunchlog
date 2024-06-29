@@ -1,0 +1,61 @@
+@startuml "LunchLog"
+
+entity Group {}
+note top: Default Django groups
+
+entity User {
+    * id: number <<generated>>
+    * uuid: UUID <<generated>>
+    * email: text
+    * password: text <<encrypted>>
+    --
+    first_name: text
+    last_name: text
+    receipt: FK <<Receipt>>
+    group: FK <<Group>>
+}
+note top: This and other default Django fields
+
+entity Address {
+    * id: number <<generated>>
+    * address_line_1: text
+    address_line_2: text
+    * postal_code: text
+    * city: text
+    * country: text
+    state: text
+}
+
+entity Restaurant {
+    * id: number <<generated>>
+    * uuid: UUID <<generated>>
+    * name: text
+    * address: FK <<Address>>
+    opening_hours: <<PlaceOpeningHoursPeriod>>
+    reviews: <<Review>>
+    serves_beer: boolean
+    serves_breakfast: boolean
+    serves_brunch: boolean
+    serves_dinner: boolean
+    serves_lunch: boolean
+    serves_vegetarian_food: boolean
+    serves_wine: boolean
+    takeout: boolean
+    types: boolean
+}
+
+entity Receipt {
+    * id: number <<generated>>
+    * uuid: UUID <<generated>>
+    * date: datetime
+    * price: number
+    * image_url: text
+    * restaurant: FK <<Restaurant>>
+}
+
+User ||--o{ Receipt
+Receipt ||--|| Restaurant
+Restaurant ||--o{ Address
+User }o--o{ Group
+
+@enduml
