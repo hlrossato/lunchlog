@@ -1,10 +1,19 @@
 from rest_framework import serializers
-from users.models import User
+from users.models import CustomUser
 
 
-class UserModelSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = [
-            "username", "email", "password", "first_name", "last_name"
-        ]
+        model = CustomUser
+        fields = ["email", "first_name", "last_name"]
+
+
+class SignUpModelSerializer(UserSerializer):
+    class Meta:
+        model = UserSerializer.Meta.model
+        fields = UserSerializer.Meta.fields + ["password"]
+
+
+class SignInSerializer(serializers.Serializer):
+    email = serializers.CharField(required=True, write_only=True)
+    password = serializers.CharField(required=True, write_only=True)

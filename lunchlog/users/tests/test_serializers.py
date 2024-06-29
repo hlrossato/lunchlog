@@ -1,9 +1,9 @@
 import pytest
-from users.api.serializers import UserModelSerializer
+from users.api.serializers import SignUpModelSerializer
 
 
 @pytest.mark.django_db
-def test_user_signup_serializer(user):
-    serializer = UserModelSerializer(data=user)
+def test_user_signup_serializer(user_signup_data):
+    serializer = SignUpModelSerializer(data=user_signup_data)
     assert serializer.is_valid() == True
-    assert serializer.data == user
+    assert serializer.data == user_signup_data

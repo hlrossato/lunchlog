@@ -57,3 +57,7 @@ django-shell:
 django-run-test:
 	@echo "Starting test $(TEST)"
 	@docker-compose run --workdir=$(PROJECT_PATH) app pytest $(TEST) --cov $(ARGS)
+
+django-run-tests-cov-report:
+	@echo "Starting tests..."
+	@docker-compose run --workdir=$(PROJECT_PATH) app pytest --cov --cov-report html $(ARGS)
