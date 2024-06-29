@@ -1,16 +1,13 @@
 from django.contrib.auth import authenticate, login
-
-from rest_framework.generics import CreateAPIView
-from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-from django.contrib.auth.views import LoginView
-
+from rest_framework.views import APIView
 
 from users.api.serializers import (
-    SignUpModelSerializer,
     SignInSerializer,
-    UserSerializer
+    SignUpModelSerializer,
+    UserSerializer,
 )
 from users.models import CustomUser
 
