@@ -8,6 +8,7 @@ __pycache__
 .env
 .coverage
 htmlcov
+.ruff_cache
 
 # OS
 .DS_Store
