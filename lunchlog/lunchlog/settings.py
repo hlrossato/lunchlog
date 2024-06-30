@@ -50,6 +50,7 @@ DJANGO_APPS = [
 ]
 PROJECT_APPS = [
     "users.apps.UsersConfig",
+    "lunch.apps.LunchConfig",
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
