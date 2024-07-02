@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from lunch.models import Receipt
-# from users.models import CustomUser
 
 
 class ReceiptModelSerializer(serializers.ModelSerializer):

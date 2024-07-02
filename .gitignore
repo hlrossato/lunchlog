@@ -10,6 +10,7 @@ __pycache__
 htmlcov
 .ruff_cache
 .idea
+staticfiles
 
 # OS
 .DS_Store

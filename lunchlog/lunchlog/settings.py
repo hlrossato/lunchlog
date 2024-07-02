@@ -21,7 +21,7 @@ PROJECT_DIR = Path(BASE_DIR)
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, True),
 )
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -148,7 +148,6 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 12621440
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-USE_S3 = env("USE_S3")
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -158,6 +157,14 @@ STORAGES = {
     },
 }
 
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+USE_S3 = env("USE_S3", bool, default=DEBUG)
 if USE_S3:
     # aws settings
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
@@ -175,16 +182,7 @@ if USE_S3:
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = "media"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
-else:
-    STATIC_URL = "/staticfiles/"
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    MEDIA_URL = "/mediafiles/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-
-# MEDIA_URL = "/mediafiles/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
