@@ -43,4 +43,5 @@ jobs:
           HOST: ${{ secrets.HOST }}
           PORT: ${{ secrets.PORT }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          USE_S3: ${{ secrets.USE_S3 }}
         run: pytest lunchlog/ --cov

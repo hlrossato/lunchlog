@@ -148,7 +148,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 12621440
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-USE_S3 = env("USE_S3", default=True)
+USE_S3 = env("USE_S3")
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
