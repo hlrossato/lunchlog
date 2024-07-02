@@ -11,9 +11,6 @@ docker-stop: docker-compose-stop
 docker-ssh: docker-exec-ssh
 docker-build: docker-compose-build
 
-django-superuser: django-createsuperuser
-django-new-app: django-create-new-app
-
 
 docker-compose-up:
 	@echo "Starting Docker..."
@@ -36,28 +33,28 @@ docker-exec-ssh:
 	@docker exec -it $(APP_ALIAS) /bin/bash
 
 # Django related
-django-create-new-app:
+new-app:
 	@echo "Creating a new app: $(APP_NAME)"
 	@docker-compose run --workdir=$(PROJECT_PATH) app django-admin startapp $(APP_NAME)
 
-django-createsuperuser:
+createsuperuser:
 	@echo "Creating Django Superuser"
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py createsuperuser
 
-django-migrations:
+migrations:
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py makemigrations
 
-django-migrate:
+migrate:
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py migrate
 
-django-shell:
+shell_plus:
 	@echo "Starting Django shell.."
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py shell_plus
 
-django-run-test:
+tests:
 	@echo "Starting test $(TEST)"
-	@docker-compose run --workdir=$(PROJECT_PATH) app pytest $(TEST) --cov
+	@docker-compose run --workdir=$(PROJECT_PATH) app pytest $(TEST) --cov -x
 
-django-run-tests-cov-report:
+tests-cov-report:
 	@echo "Starting tests..."
 	@docker-compose run --workdir=$(PROJECT_PATH) app pytest --cov --cov-report html
