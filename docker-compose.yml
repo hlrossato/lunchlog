@@ -23,7 +23,7 @@ services:
       - db
       - redis
     command: python lunchlog/manage.py runserver 0.0.0.0:8000
-    restart: on-failure
+    restart: always
     volumes:
       - .:/lunchlog
   # celery:

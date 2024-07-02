@@ -1,28 +1,46 @@
 import pytest
+from io import BytesIO
+from PIL import Image
 from datetime import datetime, timezone
 from decimal import Decimal
 from django.core.files.uploadedfile import SimpleUploadedFile
+from lunch.models import Receipt
+
+now = datetime.now(timezone.utc).date()
 
 
 @pytest.fixture
 def image():
-    return SimpleUploadedFile(
-        name="foo.gif",
-        content=b"""
-            GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,
-            \x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00
-        """,
-    )
+    image_data = BytesIO()
+    image = Image.new("RGB", (100, 100), "white")
+    image.save(image_data, format="png")
+    image_data.seek(0)
+    return SimpleUploadedFile("test.png", image_data.read(), content_type="image/png")
 
 
 @pytest.fixture
 def receipt_data(image, user):
-    now = datetime.now(timezone.utc)
     return {
         "date": now,
-        "price": Decimal(32.49),
+        "price": "32.49",
         "restaurant_name": "Best Restaurant In Town",
         "user": user,
-        "file": image,
-        "address": "Flower Str. 30, Dusseldorf, 40123",
+        "image": image,
+        "restaurant_address": "Flower Str. 30, Dusseldorf, 40123",
     }
+
+
+@pytest.fixture
+def receipt_input_data(image, receipt_data):
+    return {
+        "date": now.isoformat(),
+        "price": Decimal("32.49").quantize(Decimal(".00")),
+        "restaurant_name": receipt_data["restaurant_name"],
+        "restaurant_address": receipt_data["restaurant_address"],
+        "image": image,
+    }
+
+
+@pytest.fixture
+def receipt(receipt_data):
+    return Receipt.objects.create(**receipt_data)
