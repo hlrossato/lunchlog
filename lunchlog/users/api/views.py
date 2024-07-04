@@ -28,9 +28,10 @@ class UserSignUpView(CreateAPIView):
 
 class UserSignInView(APIView):
     response_serializer_class = UserSerializer
+    serializer_class = SignInSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = SignInSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
             username = serializer.validated_data["email"]

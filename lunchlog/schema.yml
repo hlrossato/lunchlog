@@ -1,0 +1,556 @@
+openapi: 3.0.3
+info:
+  title: LUNCHLOG API
+  version: 0.0.1
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /auth/signin:
+    post:
+      operationId: auth_signin_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignIn'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SignIn'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignIn'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignIn'
+          description: ''
+  /auth/signup:
+    post:
+      operationId: auth_signup_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpModel'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUpModel'
+          description: ''
+  /receipts/:
+    get:
+      operationId: receipts_list
+      tags:
+      - receipts
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReceiptModel'
+          description: ''
+    post:
+      operationId: receipts_create
+      tags:
+      - receipts
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReceiptModel'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReceiptModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptModel'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptModel'
+          description: ''
+  /receipts/{uuid}/:
+    get:
+      operationId: receipts_retrieve
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - receipts
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptModel'
+          description: ''
+    put:
+      operationId: receipts_update
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - receipts
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReceiptModel'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReceiptModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptModel'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptModel'
+          description: ''
+    patch:
+      operationId: receipts_partial_update
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - receipts
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReceiptModel'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReceiptModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReceiptModel'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptModel'
+          description: ''
+    delete:
+      operationId: receipts_destroy
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - receipts
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /recommendations/:
+    get:
+      operationId: recommendations_list
+      tags:
+      - recommendations
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoodRecommendationModel'
+          description: ''
+components:
+  schemas:
+    FoodRecommendationModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        street_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        street_number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        state:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        postal_code:
+          type: string
+          nullable: true
+          maxLength: 10
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        place_id:
+          type: string
+          maxLength: 100
+        formatted_address:
+          type: string
+          nullable: true
+          maxLength: 250
+        serves_beer:
+          type: boolean
+          nullable: true
+        serves_breakfast:
+          type: boolean
+          nullable: true
+        serves_brunch:
+          type: boolean
+          nullable: true
+        serves_dinner:
+          type: boolean
+          nullable: true
+        serves_lunch:
+          type: boolean
+          nullable: true
+        serves_vegetarian_food:
+          type: boolean
+          nullable: true
+        serves_wine:
+          type: boolean
+          nullable: true
+        takeout:
+          type: boolean
+          nullable: true
+        delivery:
+          type: boolean
+          nullable: true
+        opening_hours: {}
+        receipt:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - name
+      - opening_hours
+      - place_id
+      - uuid
+    PatchedReceiptModel:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        image_url:
+          type: string
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          writeOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        restaurant_name:
+          type: string
+          maxLength: 100
+        restaurant_address:
+          type: string
+          maxLength: 250
+    ReceiptModel:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        image_url:
+          type: string
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          writeOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        restaurant_name:
+          type: string
+          maxLength: 100
+        restaurant_address:
+          type: string
+          maxLength: 250
+      required:
+      - date
+      - image_url
+      - price
+      - restaurant_address
+      - restaurant_name
+      - uuid
+    SignIn:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    SignUpModel:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 150
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - password
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

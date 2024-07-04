@@ -58,3 +58,7 @@ tests:
 tests-cov-report:
 	@echo "Starting tests..."
 	@docker-compose run --workdir=$(PROJECT_PATH) app pytest --cov --cov-report html
+
+api-schema:
+	@echo "Creating new API schema"
+	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py spectacular --color --file schema.yml

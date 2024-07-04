@@ -1,6 +1,6 @@
 import pytest
 from unittest import mock
-from google_places_api.api import GooglePlacesAPI
+from google_places_api.api import GooglePlacesAPI, GooglePlaceDetail
 from google_places_api.exceptions import GooglePlacesException
 
 
@@ -114,3 +114,19 @@ def test_get_place_details__invalid_request(mocked_request_get):
 
     with pytest.raises(GooglePlacesException):
         gpapi.place_details()
+
+
+def test_google_places_detail__extract_address(google_place_detail):
+    detail = GooglePlaceDetail(google_place_detail)
+    address = detail._extract_address()
+
+    expected_address = {
+        "street_number": "48",
+        "route": "Pirrama Road",
+        "administrative_area_level_2": "City of Sydney",
+        "administrative_area_level_1": "New South Wales",
+        "country": "Australia",
+        "postal_code": "2009",
+    }
+
+    assert address == expected_address

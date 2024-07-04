@@ -1,12 +1,11 @@
+from users.managers import UserCustomManager
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from users.managers import UserCustomManager
-
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4(), editable=False)
+    uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4, editable=False)
     first_name = models.CharField(verbose_name="First name", max_length=30, blank=True)
     last_name = models.CharField(verbose_name="Last name", max_length=150, blank=True)
     email = models.EmailField(verbose_name="Email", unique=True, null=True)

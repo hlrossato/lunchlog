@@ -96,8 +96,9 @@ class GooglePlacesAPI(object):
 
 class GooglePlaceDetail(object):
     def __init__(self, place_data):
+        self._data = place_data
         self.name = place_data.get("name")
-        self.address = place_data.get("formatted_address")
+        self.formatted_address = place_data.get("formatted_address")
         self.serves_beer = place_data.get("serves_beer")
         self.serves_breakfast = place_data.get("serves_breakfast")
         self.serves_brunch = place_data.get("serves_brunch")
@@ -110,11 +111,42 @@ class GooglePlaceDetail(object):
         self.opening_hours = place_data.get("opening_hours")
         self.place_id = place_data.get("place_id")
 
+        address = self._extract_address()
+        self.street_name = address.get("route")
+        self.street_number = address.get("street_number")
+        self.city = address.get("administrative_area_level_2")
+        self.state = address.get("administrative_area_level_1")
+        self.country = address.get("country")
+        self.postal_code = address.get("postal_code")
+
+    def _extract_address(self):
+        types = [
+            "street_number",
+            "route",
+            "administrative_area_level_1",
+            "administrative_area_level_2",
+            "country",
+            "postal_code",
+        ]
+        address = {}
+        if "result" in self._data:
+            for item in self._data["result"]["address_components"]:
+                long_name = item["long_name"]
+
+                if "types" in item.keys():
+                    if len(item["types"]) == 1:
+                        address[item["types"][0]] = long_name
+                    else:
+                        for t in item["types"]:
+                            if t in types:
+                                address[t] = long_name
+        return address
+
     def to_dict(self):
         return {
             "place_id": self.place_id,
             "name": self.name,
-            "address": self.address,
+            "formatted_address": self.formatted_address,
             "serves_beer": self.serves_beer,
             "serves_breakfast": self.serves_breakfast,
             "serves_brunch": self.serves_brunch,
@@ -125,4 +157,10 @@ class GooglePlaceDetail(object):
             "takeout": self.takeout,
             "delivery": self.delivery,
             "opening_hours": self.opening_hours,
+            "street_name": self.street_name,
+            "street_number": self.street_number,
+            "city": self.city,
+            "state": self.state,
+            "country": self.country,
+            "postal_code": self.postal_code,
         }

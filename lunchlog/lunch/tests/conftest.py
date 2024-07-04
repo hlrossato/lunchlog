@@ -1,4 +1,5 @@
 import pytest
+from unittest import mock
 from io import BytesIO
 from PIL import Image
 from datetime import datetime, timezone
@@ -42,5 +43,12 @@ def receipt_input_data(image, receipt_data):
 
 
 @pytest.fixture
-def receipt(receipt_data):
+@mock.patch("lunch.services.GooglePlacesAPI.place_details")
+@mock.patch("lunch.services.GooglePlacesAPI.find_place_id")
+def receipt(mocked_place_id, mocked_place_details, receipt_data, google_place_detail):
+    from google_places_api.api import GooglePlaceDetail
+
+    mocked_place_id.return_value = "test"
+    mocked_place_details.return_value = GooglePlaceDetail(google_place_detail["result"])
+
     return Receipt.objects.create(**receipt_data)

@@ -1,20 +1,37 @@
-import uuid
-from io import BytesIO
-from PIL import Image
 import pytest
+import uuid
+
+from io import BytesIO
+from unittest import mock
 from decimal import Decimal
 from datetime import datetime, timezone
-from rest_framework import status
+from PIL import Image
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test.client import encode_multipart
 from django.urls import reverse_lazy
+
+from rest_framework import status
+
+from google_places_api.api import GooglePlaceDetail
 from lunch.models import Receipt
 
 receipt_api = reverse_lazy("lunch:receipt")
 
 
 @pytest.mark.django_db
-def test_receipt_create_api__successful(receipt_input_data, auth_client):
+@mock.patch("lunch.services.GooglePlacesAPI.place_details")
+@mock.patch("lunch.services.GooglePlacesAPI.find_place_id")
+def test_receipt_create_api__successful(
+    mocked_place_id,
+    mocked_place_details,
+    receipt_input_data,
+    auth_client,
+    google_place_detail,
+):
+    mocked_place_id.return_value = "test"
+    mocked_place_details.return_value = GooglePlaceDetail(google_place_detail["result"])
+
     response = auth_client.post(receipt_api, data=receipt_input_data)
     assert response.status_code == status.HTTP_201_CREATED
     assert Receipt.objects.count() == 1
@@ -34,7 +51,18 @@ def test_receipt_create_api__bad_request(receipt_input_data, auth_client):
 
 
 @pytest.mark.django_db
-def test_receipt_list_api(receipt_data, auth_client):
+@mock.patch("lunch.services.GooglePlacesAPI.place_details")
+@mock.patch("lunch.services.GooglePlacesAPI.find_place_id")
+def test_receipt_list_api(
+    mocked_place_id,
+    mocked_place_details,
+    receipt_data,
+    auth_client,
+    google_place_detail,
+):
+    mocked_place_id.return_value = "test"
+    mocked_place_details.return_value = GooglePlaceDetail(google_place_detail["result"])
+
     for _ in range(5):
         Receipt.objects.create(**receipt_data)
 
@@ -44,7 +72,18 @@ def test_receipt_list_api(receipt_data, auth_client):
 
 
 @pytest.mark.django_db
-def test_receipt_list_api__filter_successful(receipt_data, auth_client):
+@mock.patch("lunch.services.GooglePlacesAPI.place_details")
+@mock.patch("lunch.services.GooglePlacesAPI.find_place_id")
+def test_receipt_list_api__filter_successful(
+    mocked_place_id,
+    mocked_place_details,
+    receipt_data,
+    auth_client,
+    google_place_detail,
+):
+    mocked_place_id.return_value = "test"
+    mocked_place_details.return_value = GooglePlaceDetail(google_place_detail["result"])
+
     for _ in range(5):
         Receipt.objects.create(**receipt_data)
 
@@ -75,7 +114,18 @@ def test_receipt_list_api__filter_unsuccessful(auth_client):
 
 
 @pytest.mark.django_db
-def test_receipt_update_api__successful(receipt_input_data, auth_client):
+@mock.patch("lunch.services.GooglePlacesAPI.place_details")
+@mock.patch("lunch.services.GooglePlacesAPI.find_place_id")
+def test_receipt_update_api__successful(
+    mocked_place_id,
+    mocked_place_details,
+    receipt_input_data,
+    auth_client,
+    google_place_detail,
+):
+    mocked_place_id.return_value = "test"
+    mocked_place_details.return_value = GooglePlaceDetail(google_place_detail["result"])
+
     response = auth_client.post(receipt_api, data=receipt_input_data)
 
     assert response.status_code == status.HTTP_201_CREATED
@@ -98,7 +148,10 @@ def test_receipt_update_api__successful(receipt_input_data, auth_client):
 
 
 @pytest.mark.django_db
-def test_receipt_update_api__successful__new_image(receipt, auth_client):
+def test_receipt_update_api__successful__new_image(
+    receipt,
+    auth_client,
+):
     assert receipt
 
     def new_image():

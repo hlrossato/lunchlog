@@ -9,11 +9,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     restart: always
-  redis:
-    container_name: redis_broker
-    image: redis:latest
-    ports:
-      - "6379"
   app:
     build: .
     container_name: lunchlog_app
@@ -21,22 +16,10 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - redis
     command: python lunchlog/manage.py runserver 0.0.0.0:8000
     restart: always
     volumes:
       - .:/lunchlog
-  # celery:
-  #   build: .
-  #   command: celery -E --workdir=lunchlog -l error -A config.settings worker -B
-  #   container_name: celery_tasks
-  #   volumes:
-  #     - .:/lunchlog
-  #   depends_on:
-  #     - app
-  #     - db
-  #     - redis
 
 volumes:
   postgres_data:
-  redis-data:

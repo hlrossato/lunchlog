@@ -1,7 +1,9 @@
 import uuid
+
 from django.db import models
 
 from config.storage_backends import PrivateMediaStorage
+from common.models import Address
 from lunch.services import populate_restaurant
 
 
@@ -21,14 +23,15 @@ class Receipt(models.Model):
     def save(self, *args, **kwargs):
         created = self.pk is None
         super().save(*args, **kwargs)
-        populate_restaurant(created, self)
+        if created:
+            populate_restaurant(self)
 
 
-class Restaurant(models.Model):
+class Restaurant(Address):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     place_id = models.CharField(max_length=100)
-    address = models.CharField(max_length=250, blank=True, null=True)
+    formatted_address = models.CharField(max_length=250, blank=True, null=True)
     serves_beer = models.BooleanField(default=False, null=True)
     serves_breakfast = models.BooleanField(default=False, null=True)
     serves_brunch = models.BooleanField(default=False, null=True)

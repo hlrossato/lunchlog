@@ -8,7 +8,7 @@ class ReceiptModelSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     image = serializers.ImageField(write_only=True, required=False)
 
-    def get_image_url(self, obj):
+    def get_image_url(self, obj: Receipt) -> str:
         return obj.image.url
 
     def create(self, validated_data):

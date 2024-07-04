@@ -30,11 +30,6 @@ env = environ.Env(
     AWS_ACCESS_KEY_ID=(str, ""),
     AWS_SECRET_ACCESS_KEY=(str, ""),
     AWS_STORAGE_BUCKET_NAME=(str, ""),
-    REDIS_HOST=(str, "localhost"),
-    REDIS_PORT=(str, "6379"),
-    CELERY_BROKER_URL=(str, "redis://redis:6379/0"),
-    CELERY_BROKER_TRANSPORT_OPTIONS=(str, "{'visibility_timeout': 3600}"),
-    CELERY_RESULT_BACKEND=(str, "redis://redis:6379/0"),
 )
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -64,11 +59,14 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     "users.apps.UsersConfig",
     "lunch.apps.LunchConfig",
+    "food_recommendation.apps.FoodRecommendationConfig",
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_extensions",
     "storages",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",  # required for Django collectstatic discovery
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -214,6 +212,25 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 GOOGLE_PLACES_API_KEY = env("GOOGLE_PLACES_API_KEY")
+
+SPECTACULAR_SETTINGS = {
+    "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "VERSION": "0.0.1",
+    "TITLE": "LUNCHLOG API",
+}
+
+CSP_DEFAULT_SRC = ("'self'", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'", "data:")
+
+# Option: CDN
+CSP_DEFAULT_SRC = ("'self'", "'unsafe-inline'", "cdn.jsdelivr.net")
+CSP_IMG_SRC = ("'self'", "data:", "cdn.jsdelivr.net", "cdn.redoc.ly")
+CSP_WORKER_SRC = ("'self'", "blob:")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "fonts.googleapis.com")
+CSP_FONT_SRC = ("'self'", "fonts.gstatic.com")
