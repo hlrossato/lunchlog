@@ -1,0 +1,2 @@
+class GooglePlacesException(Exception):
+    pass

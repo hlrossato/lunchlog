@@ -34,7 +34,17 @@ def test_receipt_create_api__bad_request(receipt_input_data, auth_client):
 
 
 @pytest.mark.django_db
-def test_receipt_create_api__filter_successful(receipt_data, auth_client):
+def test_receipt_list_api(receipt_data, auth_client):
+    for _ in range(5):
+        Receipt.objects.create(**receipt_data)
+
+    response = auth_client.get(receipt_api)
+    assert len(response.json()) == 5
+    assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+def test_receipt_list_api__filter_successful(receipt_data, auth_client):
     for _ in range(5):
         Receipt.objects.create(**receipt_data)
 
@@ -58,7 +68,7 @@ def test_receipt_create_api__filter_successful(receipt_data, auth_client):
 
 
 @pytest.mark.django_db
-def test_receipt_create_api__filter_unsuccessful(auth_client):
+def test_receipt_list_api__filter_unsuccessful(auth_client):
     response = auth_client.get(f"{receipt_api}?month=2")
     assert len(response.json()) == 0
     assert response.status_code == status.HTTP_200_OK

@@ -4,6 +4,8 @@ import urllib
 from collections.abc import Iterable
 from typing import Union
 
+from google_places_api.exceptions import GooglePlacesException
+
 type Response[S] = Iterable[S] | int
 
 
@@ -40,6 +42,9 @@ class GooglePlacesAPI(object):
             self.RESPONSE_STATUS_OK,
             self.RESPONSE_ZERO_RESULTS,
         ]:
+            msg = "Request to %s failed with error %s"
+            err = ""
+            raise GooglePlacesException(msg, err)
             raise Exception(
                 "Request to %s failed with error %s", api, response.json()["status"]
             )

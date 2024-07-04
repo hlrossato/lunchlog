@@ -5,11 +5,11 @@ from lunch.models import Receipt
 class ReceiptModelSerializer(serializers.ModelSerializer):
     date = serializers.DateField(format="%d/%m/%y")
     price = serializers.DecimalField(max_digits=5, decimal_places=2)
-    image_url = serializers.URLField(source="image.url", read_only=True)
+    image_url = serializers.SerializerMethodField()
     image = serializers.ImageField(write_only=True, required=False)
 
     def get_image_url(self, obj):
-        return obj.url
+        return obj.image.url
 
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
