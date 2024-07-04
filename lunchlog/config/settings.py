@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 import environ
 
@@ -22,6 +23,18 @@ PROJECT_DIR = Path(BASE_DIR)
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True),
+    SECRET_KEY=(str, get_random_secret_key()),
+    ALLOWED_HOSTS=(list, ["*"]),
+    GOOGLE_PLACES_API_KEY=(str, None),
+    DATABASE_URL=(str, "postgres://postgres:postgres@db:5432/postgres"),
+    AWS_ACCESS_KEY_ID=(str, ""),
+    AWS_SECRET_ACCESS_KEY=(str, ""),
+    AWS_STORAGE_BUCKET_NAME=(str, ""),
+    REDIS_HOST=(str, "localhost"),
+    REDIS_PORT=(str, "6379"),
+    CELERY_BROKER_URL=(str, "redis://redis:6379/0"),
+    CELERY_BROKER_TRANSPORT_OPTIONS=(str, "{'visibility_timeout': 3600}"),
+    CELERY_RESULT_BACKEND=(str, "redis://redis:6379/0"),
 )
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -36,7 +49,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -202,3 +215,5 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
 }
+
+GOOGLE_PLACES_API_KEY = env("GOOGLE_PLACES_API_KEY")
