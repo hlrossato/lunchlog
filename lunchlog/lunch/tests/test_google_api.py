@@ -18,6 +18,17 @@ def test_google_places_api__api_key_added_to_params():
     assert "key" in gpapi._params
 
 
+def test_google_places_api__encode_data():
+    params = {
+        "input": "test",
+        "inputtype": "textquery",
+        "fields": ["test", "hello", "world"],
+    }
+    gpapi = GooglePlacesAPI(API_KEY)
+    encoded = gpapi._encode_data(params)
+    assert encoded == "input=test&inputtype=textquery&fields=test%2Chello%2Cworld"
+
+
 @mock.patch("lunch.api.google_places_api.requests.get")
 def test_find_places__successful(mocked_request_get):
     response_json = {

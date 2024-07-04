@@ -21,6 +21,11 @@ class GooglePlacesAPI(object):
     RESPONSE_NOT_FOUND = "NOT_FOUND"
     RESPONSE_REQUEST_DENIED = "REQUEST_DENIED"
 
+    # supported fields can be found here https://developers.google.com/maps/documentation/places/web-service/search-find-place#fields
+    REQUIRED_FIND_PLACES_FIELDS = [
+        "place_id",
+    ]
+
     def __init__(self, api_key: str = None):
         self._api_key = api_key
         self._params = {}
@@ -39,14 +44,19 @@ class GooglePlacesAPI(object):
                 "Request to %s failed with error %s", api, response.json()["status"]
             )
 
-    def _fetch_results(self, api: str, params: dict) -> Union[str, Response]:
+    def _encode_data(self, params):
         encoded_data = {}
         for k, v in params.items():
             if isinstance(v, str):
                 v = v.encode("utf-8")
+            elif isinstance(v, list):
+                new_value = ",".join([item for item in v])
+                v = new_value.replace(" ", "").encode("utf-8")
             encoded_data[k] = v
-        encoded_data = urllib.parse.urlencode(encoded_data)
+        return urllib.parse.urlencode(encoded_data)
 
+    def _fetch_results(self, api: str, params: dict) -> Union[str, Response]:
+        encoded_data = self._encode_data(params)
         url = api + encoded_data
         response = requests.get(url)
         return url, response
@@ -57,9 +67,16 @@ class GooglePlacesAPI(object):
     def _get_place_details(self, response: Response) -> dict:
         return response.json()["result"]
 
-    def find_place(self, query: str = None, inputtype: str = "textquery"):
-        self._params = {"query": query}
+    def find_place(
+        self, input: str = None, inputtype: str = "textquery", fields: str = None
+    ):
+        # if no fields is provided the api will return the place_id only
+        self._params = {"input": input}
         self._params["inputtype"] = inputtype
+        self._params["fields"] = self.REQUIRED_FIND_PLACES_FIELDS
+        if fields:
+            self._params["fields"].extend(fields)
+
         self._add_key_to_params()
         api, response = self._fetch_results(
             GooglePlacesAPI.FIND_PLACE_API, self._params
