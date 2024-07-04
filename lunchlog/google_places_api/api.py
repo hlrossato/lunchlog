@@ -23,11 +23,6 @@ class GooglePlacesAPI(object):
     RESPONSE_NOT_FOUND = "NOT_FOUND"
     RESPONSE_REQUEST_DENIED = "REQUEST_DENIED"
 
-    # supported fields can be found here https://developers.google.com/maps/documentation/places/web-service/search-find-place#fields
-    REQUIRED_FIND_PLACES_FIELDS = [
-        "place_id",
-    ]
-
     def __init__(self, api_key: str = None):
         self._api_key = api_key
         self._params = {}
@@ -46,7 +41,7 @@ class GooglePlacesAPI(object):
             err = ""
             raise GooglePlacesException(msg, err)
 
-    def _encode_data(self, params):
+    def _encode_data(self, params: dict) -> str:
         encoded_data = {}
         for k, v in params.items():
             if isinstance(v, str):
@@ -63,28 +58,31 @@ class GooglePlacesAPI(object):
         response = requests.get(url)
         return url, response
 
-    def _get_places_json(self, response: Response) -> dict:
-        return [r for r in response.json()["candidates"]]
+    def _get_place_id(self, response: Response) -> dict:
+        if "candidates" not in response.json():
+            return []
+
+        if len(response.json()["candidates"]) < 1:
+            return []
+
+        return [
+            r["place_id"] for r in response.json()["candidates"] if "place_id" in r
+        ][0]
 
     def _get_place_details(self, response: Response) -> dict:
-        return response.json()["result"]
+        return GooglePlaceDetail(response.json()["result"])
 
-    def find_place(
-        self, input: str = None, inputtype: str = "textquery", fields: str = None
-    ):
+    def find_place_id(self, input: str = None, inputtype: str = "textquery"):
         # if no fields is provided the api will return the place_id only
         self._params = {"input": input}
         self._params["inputtype"] = inputtype
-        self._params["fields"] = self.REQUIRED_FIND_PLACES_FIELDS
-        if fields:
-            self._params["fields"].extend(fields)
 
         self._add_key_to_params()
         api, response = self._fetch_results(
             GooglePlacesAPI.FIND_PLACE_API, self._params
         )
         self._validate_response(api, response)
-        return self._get_places_json(response)
+        return self._get_place_id(response)
 
     def place_details(self, place_id: str = None) -> dict:
         self._params = {"place_id": place_id}
@@ -94,3 +92,37 @@ class GooglePlacesAPI(object):
         )
         self._validate_response(api, response)
         return self._get_place_details(response)
+
+
+class GooglePlaceDetail(object):
+    def __init__(self, place_data):
+        self.name = place_data.get("name")
+        self.address = place_data.get("formatted_address")
+        self.serves_beer = place_data.get("serves_beer")
+        self.serves_breakfast = place_data.get("serves_breakfast")
+        self.serves_brunch = place_data.get("serves_brunch")
+        self.serves_dinner = place_data.get("serves_dinner")
+        self.serves_lunch = place_data.get("serves_lunch")
+        self.serves_vegetarian_food = place_data.get("serves_vegetarian_food")
+        self.serves_wine = place_data.get("serves_wine")
+        self.takeout = place_data.get("takeout")
+        self.delivery = place_data.get("delivery")
+        self.opening_hours = place_data.get("opening_hours")
+        self.place_id = place_data.get("place_id")
+
+    def to_dict(self):
+        return {
+            "place_id": self.place_id,
+            "name": self.name,
+            "address": self.address,
+            "serves_beer": self.serves_beer,
+            "serves_breakfast": self.serves_breakfast,
+            "serves_brunch": self.serves_brunch,
+            "serves_dinner": self.serves_dinner,
+            "serves_lunch": self.serves_lunch,
+            "serves_vegetarian_food": self.serves_vegetarian_food,
+            "serves_wine": self.serves_wine,
+            "takeout": self.takeout,
+            "delivery": self.delivery,
+            "opening_hours": self.opening_hours,
+        }

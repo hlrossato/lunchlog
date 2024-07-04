@@ -31,14 +31,10 @@ def test_google_places_api__encode_data():
 
 
 @mock.patch("google_places_api.api.requests.get")
-def test_find_places__successful(mocked_request_get):
+def test_find_place_id__successful(mocked_request_get):
     response_json = {
         "candidates": [
             {
-                "formatted_address": "Hunsrückenstraße 15, 40213 Düsseldorf, Deutschland",
-                "name": "Casita Mexicana Altstadt",
-                "opening_hours": {"open_now": False},
-                "rating": 4.4,
                 "place_id": "test",
             }
         ],
@@ -49,45 +45,9 @@ def test_find_places__successful(mocked_request_get):
     mocked_request_get.return_value.json.return_value = response_json
     gpapi = GooglePlacesAPI(API_KEY)
 
-    result = gpapi.find_place("Casita Mexicana Dusseldorf")
+    result = gpapi.find_place_id("Casita Mexicana Dusseldorf")
 
-    assert (
-        result[0]["formatted_address"]
-        == response_json["candidates"][0]["formatted_address"]
-    )
-    assert result[0]["name"] == response_json["candidates"][0]["name"]
-    assert result[0]["opening_hours"] == response_json["candidates"][0]["opening_hours"]
-    assert result[0]["rating"] == response_json["candidates"][0]["rating"]
-    assert result[0]["place_id"] == response_json["candidates"][0]["place_id"]
-
-
-@mock.patch("google_places_api.api.requests.get")
-def test_find_places__passing_specific_fields(mocked_request_get):
-    response_json = {
-        "candidates": [
-            {
-                "formatted_address": "Hunsrückenstraße 15, 40213 Düsseldorf, Deutschland",
-                "name": "Casita Mexicana Altstadt",
-                "place_id": "test",
-            }
-        ],
-        "status": GooglePlacesAPI.RESPONSE_STATUS_OK,
-    }
-
-    mocked_request_get.return_value = mock.Mock(ok=True)
-    mocked_request_get.return_value.json.return_value = response_json
-    gpapi = GooglePlacesAPI(API_KEY)
-
-    result = gpapi.find_place(
-        "Casita Mexicana Dusseldorf", fields=["formatted_address", "name"]
-    )
-
-    assert (
-        result[0]["formatted_address"]
-        == response_json["candidates"][0]["formatted_address"]
-    )
-    assert result[0]["name"] == response_json["candidates"][0]["name"]
-    assert result[0]["place_id"] == response_json["candidates"][0]["place_id"]
+    assert result == response_json["candidates"][0]["place_id"]
 
 
 @mock.patch("google_places_api.api.requests.get")
@@ -101,7 +61,7 @@ def test_find_places__empty_results(mocked_request_get):
     mocked_request_get.return_value.json.return_value = response_json
     gpapi = GooglePlacesAPI(API_KEY)
 
-    result = gpapi.find_place("Bla Bla Bla")
+    result = gpapi.find_place_id("Bla Bla Bla")
     assert result == []
 
 
@@ -114,7 +74,7 @@ def test_find_places__invalid_request(mocked_request_get):
     gpapi = GooglePlacesAPI(API_KEY)
 
     with pytest.raises(GooglePlacesException):
-        gpapi.find_place()
+        gpapi.find_place_id()
 
 
 @mock.patch("google_places_api.api.requests.get")
@@ -127,7 +87,7 @@ def test_get_place_details__successful(mocked_request_get, google_place_detail):
     place_id = "ChIJN1t_tDeuEmsRUsoyG83frY4"
     result = gpapi.place_details(place_id)
 
-    assert result["place_id"] == place_id
+    assert result.place_id == place_id
 
 
 @mock.patch("google_places_api.api.requests.get")

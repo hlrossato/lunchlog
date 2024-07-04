@@ -2,19 +2,49 @@ import uuid
 from django.db import models
 
 from config.storage_backends import PrivateMediaStorage
+from lunch.services import populate_restaurant
 
 
 class Receipt(models.Model):
-    uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4, editable=False)
-    date = models.DateField(verbose_name="Date")
-    price = models.DecimalField(verbose_name="Price", max_digits=5, decimal_places=2)
-    restaurant_name = models.CharField(verbose_name="Restaurant Name", max_length=100)
-    restaurant_address = models.CharField(
-        verbose_name="Restaurant Address", max_length=250
-    )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    date = models.DateField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    restaurant_name = models.CharField(max_length=100)
+    restaurant_address = models.CharField(max_length=250)
     user = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
     image = models.ImageField(storage=PrivateMediaStorage())
 
     class Meta:
         verbose_name = "Receipt"
         verbose_name_plural = "Receipts"
+
+    def save(self, *args, **kwargs):
+        created = self.pk is None
+        super().save(*args, **kwargs)
+        populate_restaurant(created, self)
+
+
+class Restaurant(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200)
+    place_id = models.CharField(max_length=100)
+    address = models.CharField(max_length=250, blank=True, null=True)
+    serves_beer = models.BooleanField(default=False, null=True)
+    serves_breakfast = models.BooleanField(default=False, null=True)
+    serves_brunch = models.BooleanField(default=False, null=True)
+    serves_dinner = models.BooleanField(default=False, null=True)
+    serves_lunch = models.BooleanField(default=False, null=True)
+    serves_vegetarian_food = models.BooleanField(default=False, null=True)
+    serves_wine = models.BooleanField(default=False, null=True)
+    takeout = models.BooleanField(default=False, null=True)
+    delivery = models.BooleanField(default=False, null=True)
+    opening_hours = models.JSONField()
+
+    receipt = models.ForeignKey("lunch.Receipt", on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        verbose_name = "Restaurant"
+        verbose_name_plural = "Restaurants"
+
+    def __str__(self):
+        return self.name

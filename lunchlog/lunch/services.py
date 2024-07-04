@@ -1,0 +1,16 @@
+from django.conf import settings
+from django.db import transaction
+from google_places_api.api import GooglePlacesAPI
+
+
+def populate_restaurant(created, receipt):
+    from lunch.models import Restaurant
+
+    if created:
+        api = GooglePlacesAPI(settings.GOOGLE_PLACES_API_KEY)
+        query = f"{receipt.restaurant_name} {receipt.restaurant_address}"
+
+        with transaction.atomic():
+            place_id = api.find_place_id(query)
+            place = api.place_details(place_id)
+            Restaurant.objects.create(**place.to_dict())
