@@ -1,6 +1,6 @@
 import pytest
-from users.models import CustomUser
 from django.test.client import Client
+from users.models import CustomUser
 
 
 @pytest.fixture

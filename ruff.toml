@@ -43,9 +43,9 @@ fixable = ["ALL"]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [lint.isort]
-case-sensitive = true
 combine-as-imports = true
 lines-after-imports = 1
+lines-between-types = 1
 no-lines-before = ["standard-library",]
 
 

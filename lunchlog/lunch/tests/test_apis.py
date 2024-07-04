@@ -1,18 +1,14 @@
 import pytest
 import uuid
-
 from io import BytesIO
 from unittest import mock
 from decimal import Decimal
 from datetime import datetime, timezone
 from PIL import Image
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test.client import encode_multipart
 from django.urls import reverse_lazy
-
 from rest_framework import status
-
 from google_places_api.api import GooglePlaceDetail
 from lunch.models import Receipt
 

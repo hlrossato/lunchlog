@@ -17,10 +17,6 @@ def test_create_user__value_error():
 
 @pytest.mark.django_db
 def test_create_superuser():
-    user = CustomUser.objects.create_superuser(
-        email="test@test.com", password="test"
-    )
+    user = CustomUser.objects.create_superuser(email="test@test.com", password="test")
     assert user.is_superuser is True
     assert user.is_staff is True
-
-
