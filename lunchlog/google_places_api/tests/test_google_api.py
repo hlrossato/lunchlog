@@ -1,13 +1,14 @@
 import pytest
 from unittest import mock
 from google_places_api.api import GooglePlacesAPI
+from google_places_api.exceptions import GooglePlacesException
 
 
 API_KEY = "test"
 
 
 def test_google_places_api__missing_api_key():
-    with pytest.raises(Exception):
+    with pytest.raises(GooglePlacesException):
         gpapi = GooglePlacesAPI()
         gpapi._add_key_to_params()
 
@@ -112,7 +113,7 @@ def test_find_places__invalid_request(mocked_request_get):
     mocked_request_get.return_value.json.return_value = response_json
     gpapi = GooglePlacesAPI(API_KEY)
 
-    with pytest.raises(Exception):
+    with pytest.raises(GooglePlacesException):
         gpapi.find_place()
 
 
@@ -138,7 +139,7 @@ def test_get_place_details__not_found(mocked_request_get):
 
     gpapi = GooglePlacesAPI(API_KEY)
 
-    with pytest.raises(Exception):
+    with pytest.raises(GooglePlacesException):
         gpapi.place_details("test")
 
 
@@ -151,5 +152,5 @@ def test_get_place_details__invalid_request(mocked_request_get):
 
     gpapi = GooglePlacesAPI(API_KEY)
 
-    with pytest.raises(Exception):
+    with pytest.raises(GooglePlacesException):
         gpapi.place_details()
