@@ -70,7 +70,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "lunchlog.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "lunchlog.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
@@ -176,8 +176,8 @@ if USE_S3:
     # s3 static settings
     STATIC_LOCATION = "static"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
-    STORAGES["staticfiles"]["BACKEND"] = "lunchlog.storage_backends.StaticStorage"
-    STORAGES["default"]["BACKEND"] = "lunchlog.storage_backends.PublicMediaStorage"
+    STORAGES["staticfiles"]["BACKEND"] = "config.storage_backends.StaticStorage"
+    STORAGES["default"]["BACKEND"] = "config.storage_backends.PublicMediaStorage"
 
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = "media"

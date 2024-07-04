@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 from project_setup import main as project_setup_main
@@ -9,7 +10,7 @@ def main():
     """Run administrative tasks."""
     # Initialize .env file with all configuration needed
     project_setup_main()
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lunchlog.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -34,7 +34,7 @@ class GooglePlacesAPI(object):
 
     def _add_key_to_params(self):
         if self._api_key is None:
-            raise Exception("Missing API KEY")
+            raise GooglePlacesException("Missing API KEY")
         self._params["key"] = self._api_key
 
     def _validate_response(self, api: str, response: Response):
@@ -45,9 +45,6 @@ class GooglePlacesAPI(object):
             msg = "Request to %s failed with error %s"
             err = ""
             raise GooglePlacesException(msg, err)
-            raise Exception(
-                "Request to %s failed with error %s", api, response.json()["status"]
-            )
 
     def _encode_data(self, params):
         encoded_data = {}

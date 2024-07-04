@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 
-from lunchlog.storage_backends import PrivateMediaStorage
+from config.storage_backends import PrivateMediaStorage
 
 
 class Receipt(models.Model):
