@@ -43,8 +43,8 @@ def google_place_detail():
                     "types": ["locality", "political"],
                 },
                 {
-                    "long_name": "City of Sydney",
-                    "short_name": "City of Sydney",
+                    "long_name": "Sydney",
+                    "short_name": "Sydney",
                     "types": ["administrative_area_level_2", "political"],
                 },
                 {

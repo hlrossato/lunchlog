@@ -117,13 +117,13 @@ def test_get_place_details__invalid_request(mocked_request_get):
 
 
 def test_google_places_detail__extract_address(google_place_detail):
-    detail = GooglePlaceDetail(google_place_detail)
+    detail = GooglePlaceDetail(google_place_detail["result"])
     address = detail._extract_address()
 
     expected_address = {
         "street_number": "48",
         "route": "Pirrama Road",
-        "administrative_area_level_2": "City of Sydney",
+        "administrative_area_level_2": "Sydney",
         "administrative_area_level_1": "New South Wales",
         "country": "Australia",
         "postal_code": "2009",

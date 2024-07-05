@@ -111,6 +111,7 @@ class GooglePlaceDetail(object):
         self.opening_hours = place_data.get("opening_hours")
         self.place_id = place_data.get("place_id")
 
+        # breakpoint()
         address = self._extract_address()
         self.street_name = address.get("route")
         self.street_number = address.get("street_number")
@@ -129,17 +130,17 @@ class GooglePlaceDetail(object):
             "postal_code",
         ]
         address = {}
-        if "result" in self._data:
-            for item in self._data["result"]["address_components"]:
-                long_name = item["long_name"]
 
-                if "types" in item.keys():
-                    if len(item["types"]) == 1:
-                        address[item["types"][0]] = long_name
-                    else:
-                        for t in item["types"]:
-                            if t in types:
-                                address[t] = long_name
+        for item in self._data["address_components"]:
+            long_name = item["long_name"]
+
+            if "types" in item.keys():
+                if len(item["types"]) == 1:
+                    address[item["types"][0]] = long_name
+                else:
+                    for t in item["types"]:
+                        if t in types:
+                            address[t] = long_name
         return address
 
     def to_dict(self):
