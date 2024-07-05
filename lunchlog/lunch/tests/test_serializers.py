@@ -35,4 +35,4 @@ def test_serializer__create(
     assert instance is not None
 
     ser = ReceiptModelSerializer(instance=instance)
-    assert ser.get_image_url(instance) == instance.image.url
+    assert ser.data["image"] == instance.image.url

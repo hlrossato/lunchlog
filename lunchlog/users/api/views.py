@@ -1,4 +1,6 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
@@ -44,3 +46,9 @@ class UserLoginAPIView(APIView):
                 return Response(data, status=status.HTTP_202_ACCEPTED)
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserLogoutAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return HttpResponseRedirect(reverse("users:user-login"))

@@ -18,15 +18,18 @@ class ReceiptAPIView(ReceiptMixin, ListCreateAPIView):
         return context
 
     def get_queryset(self):
+        print(self.request.query_params)
         month = self.request.query_params.get("month")
+        queryset = Receipt.objects.filter(user=self.request.user)
+
         if month:
-            queryset = Receipt.objects.filter(date__month=month)
-        else:
-            queryset = Receipt.objects.all()
+            queryset = queryset.filter(date__month=month)
 
         return queryset
 
 
 class ReceiptDetailAPIView(ReceiptMixin, RetrieveUpdateDestroyAPIView):
     lookup_field = "uuid"
-    queryset = Receipt.objects.all()
+
+    def get_queryset(self):
+        return Receipt.objects.filter(user=self.request.user)

@@ -10,6 +10,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignUpModelSerializer(UserSerializer):
+    password = serializers.CharField(
+        required=True, write_only=True, style={"input_type": "password"}
+    )
+
     class Meta:
         model = UserSerializer.Meta.model
         fields = UserSerializer.Meta.fields + ["password"]

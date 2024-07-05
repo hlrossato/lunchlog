@@ -6,4 +6,5 @@ from users.api.serializers import SignUpModelSerializer
 def test_user_signup_serializer(user_signup_data):
     serializer = SignUpModelSerializer(data=user_signup_data)
     assert serializer.is_valid()
+    user_signup_data.pop("password")
     assert serializer.data == user_signup_data

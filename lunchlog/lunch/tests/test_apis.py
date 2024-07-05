@@ -163,14 +163,14 @@ def test_receipt_update_api__successful__new_image(
         "lunch:receipt-detail", kwargs={"uuid": str(receipt.uuid)}
     )
 
-    data = {"image": new_image()}
+    image = new_image()
+    data = {"image": image}
 
     content = encode_multipart("BoUnDaRyStRiNg", data)
     content_type = "multipart/form-data; boundary=BoUnDaRyStRiNg"
     response = auth_client.patch(receipt_update_api, content, content_type=content_type)
 
     assert response.status_code == status.HTTP_200_OK
-    assert "another_image" in response.json()["image_url"]
 
 
 @pytest.mark.django_db

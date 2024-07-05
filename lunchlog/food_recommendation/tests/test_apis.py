@@ -8,7 +8,7 @@ food_recommendation_api = reverse_lazy("food_recommendation:food-recommendation"
 
 
 @pytest.mark.django_db
-def test_food_recommendation__successful(
+def test_food_recommendation__no_filter_empty_response(
     auth_client,
     google_place_detail,
     user,
@@ -22,11 +22,11 @@ def test_food_recommendation__successful(
 
     response = auth_client.get(food_recommendation_api)
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == 5
+    assert len(response.json()) == 0
 
 
 @pytest.mark.django_db
-def test_food_recommendation__filter(auth_client, google_place_detail, user):
+def test_food_recommendation__successful(auth_client, google_place_detail, user):
     place = GooglePlaceDetail(google_place_detail["result"]).to_dict()
 
     for _ in range(5):

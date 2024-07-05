@@ -1,10 +1,16 @@
 import uuid
+from datetime import datetime, timezone
 
 from django.db import models
 
-from config.storage_backends import PrivateMediaStorage
 from common.models import Address
 from lunch.services import populate_restaurant
+
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<date>/<filename>
+    now = datetime.now(timezone.utc).date()
+    return f"user_{instance.user.id}/{now.strftime("%Y/%m/%d")}/{filename}"
 
 
 class Receipt(models.Model):
@@ -14,7 +20,7 @@ class Receipt(models.Model):
     restaurant_name = models.CharField(max_length=100)
     restaurant_address = models.CharField(max_length=250)
     user = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
-    image = models.ImageField(storage=PrivateMediaStorage())
+    image = models.ImageField(upload_to=user_directory_path)
 
     class Meta:
         verbose_name = "Receipt"
