@@ -360,7 +360,6 @@ paths:
       security:
       - basicAuth: []
       - cookieAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -448,11 +447,14 @@ components:
         receipt:
           type: integer
           nullable: true
+        user:
+          type: integer
       required:
       - id
       - name
       - opening_hours
       - place_id
+      - user
       - uuid
     PatchedReceiptModel:
       type: object
