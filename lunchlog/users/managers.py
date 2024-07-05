@@ -1,3 +1,4 @@
+from typing import Any
 from django.contrib.auth.models import BaseUserManager
 
 
@@ -5,6 +6,10 @@ class UserCustomManager(BaseUserManager):
     """User custom manager - Making sure users can signup with their
     email addresses
     """
+
+    def create(self, **kwargs: Any) -> Any:
+        email = kwargs.pop("email")
+        return self._create_user(email=email, **kwargs)
 
     def _create_user(self, email, password, **extra_fields):
         if not email:
@@ -24,4 +29,6 @@ class UserCustomManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
         return self._create_user(email, password, **extra_fields)

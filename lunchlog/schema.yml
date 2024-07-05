@@ -149,9 +149,9 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
-  /auth/signin:
+  /auth/login:
     post:
-      operationId: auth_signin_create
+      operationId: auth_login_create
       tags:
       - auth
       requestBody:

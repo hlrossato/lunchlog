@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from users.models import CustomUser
 
 user_sign_up_url = reverse_lazy("users:user-signup")
-user_sign_in_url = reverse_lazy("users:user-signin")
+user_sign_in_url = reverse_lazy("users:user-login")
 
 
 @pytest.mark.django_db

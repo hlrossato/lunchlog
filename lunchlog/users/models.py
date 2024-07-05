@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    username = None
+
     uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4, editable=False)
     first_name = models.CharField(verbose_name="First name", max_length=30, blank=True)
     last_name = models.CharField(verbose_name="Last name", max_length=150, blank=True)

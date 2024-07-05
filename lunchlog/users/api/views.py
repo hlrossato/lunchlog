@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.api.serializers import (
-    SignInSerializer,
+    LoginSerializer,
     SignUpModelSerializer,
     UserSerializer,
 )
@@ -26,18 +26,18 @@ class UserSignUpView(CreateAPIView):
         return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class UserSignInView(APIView):
+class UserLoginAPIView(APIView):
     response_serializer_class = UserSerializer
-    serializer_class = SignInSerializer
+    serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
 
-        if serializer.is_valid():
-            username = serializer.validated_data["email"]
+        if serializer.is_valid(raise_exception=True):
+            email = serializer.validated_data["email"]
             password = serializer.validated_data["password"]
 
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=email, password=password)
             if user and user.is_active:
                 login(request, user)
                 data = self.response_serializer_class(instance=user).data
