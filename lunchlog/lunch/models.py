@@ -44,6 +44,7 @@ class Restaurant(Address):
     opening_hours = models.JSONField()
 
     receipt = models.ForeignKey("lunch.Receipt", on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Restaurant"

@@ -13,4 +13,4 @@ def populate_restaurant(receipt):
     with transaction.atomic():
         place_id = api.find_place_id(query)
         place = api.place_details(place_id)
-        Restaurant.objects.create(**place.to_dict(), receipt=receipt)
+        Restaurant.objects.create(**place.to_dict(), receipt=receipt, user=receipt.user)

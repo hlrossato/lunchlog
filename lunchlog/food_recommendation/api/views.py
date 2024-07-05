@@ -11,7 +11,12 @@ class FoodRecommendationListAPIView(ListAPIView):
     ]
 
     def get_queryset(self):
+        queryset = Restaurant.objects.prefetch_related("user").filter(
+            user=self.request.user
+        )
+
         city = self.request.query_params.get("city")
         if city:
-            return Restaurant.objects.filter(city=city)
-        return Restaurant.objects.all()
+            queryset = queryset.filter(city=city)
+
+        return queryset
