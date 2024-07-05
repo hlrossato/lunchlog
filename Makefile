@@ -47,6 +47,9 @@ migrations:
 migrate:
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py migrate
 
+collectstatic:
+	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py collectstatic
+
 shell_plus:
 	@echo "Starting Django shell.."
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py shell_plus

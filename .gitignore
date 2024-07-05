@@ -11,6 +11,7 @@ htmlcov
 .ruff_cache
 .idea
 staticfiles
+mediafiles
 
 # OS
 .DS_Store

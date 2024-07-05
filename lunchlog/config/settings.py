@@ -18,11 +18,10 @@ import environ
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_DIR = Path(BASE_DIR)
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, True),
+    DEBUG=(bool, False),
     SECRET_KEY=(str, get_random_secret_key()),
     ALLOWED_HOSTS=(list, ["*"]),
     GOOGLE_PLACES_API_KEY=(str, None),
@@ -30,6 +29,7 @@ env = environ.Env(
     AWS_ACCESS_KEY_ID=(str, ""),
     AWS_SECRET_ACCESS_KEY=(str, ""),
     AWS_STORAGE_BUCKET_NAME=(str, ""),
+    USE_S3=(bool, False),
 )
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -86,8 +86,8 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [f"{PROJECT_DIR}/templates"],
-        "APP_DIRS": True,
+        "DIRS": [BASE_DIR.joinpath("templates")],
+        "APP_DIRS": DEBUG,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -154,7 +154,7 @@ USE_TZ = True
 #     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 # ]
 
-FILE_UPLOAD_MAX_MEMORY_SIZE = 12621440
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 12621440
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -173,9 +173,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
-USE_S3 = env("USE_S3", bool, default=DEBUG)
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "templates"),
+)
+
+USE_S3 = env("USE_S3")
 if USE_S3:
     # aws settings
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
