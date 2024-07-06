@@ -19,6 +19,18 @@ def test_google_places_api__api_key_added_to_params():
     assert "key" in gpapi._params
 
 
+@mock.patch("google_places_api.api.requests.get")
+def test_google_places_api__get_place_id__empty_list(mocked_request_get):
+    gpapi = GooglePlacesAPI(API_KEY)
+    response_json = {}
+
+    mocked_request_get.return_value = mock.Mock(ok=True)
+    mocked_request_get.return_value.json.return_value = response_json
+
+    place_id = gpapi._get_place_id(mocked_request_get.return_value)
+    assert place_id == []
+
+
 def test_google_places_api__encode_data():
     params = {
         "input": "test",

@@ -45,10 +45,9 @@ class UserLoginAPIView(APIView):
                 data = self.response_serializer_class(instance=user).data
                 return Response(data, status=status.HTTP_202_ACCEPTED)
             return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLogoutAPIView(APIView):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         logout(request)
         return HttpResponseRedirect(reverse("users:user-login"))

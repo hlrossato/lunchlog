@@ -1,8 +1,10 @@
 import pytest
 from unittest import mock
+from django.test import override_settings
 from django.test.client import RequestFactory
 from lunch.api.serializers import ReceiptModelSerializer
 from google_places_api.api import GooglePlaceDetail
+from config.storage_backends import PrivateMediaStorage
 
 
 @pytest.mark.django_db
@@ -36,3 +38,10 @@ def test_serializer__create(
 
     ser = ReceiptModelSerializer(instance=instance)
     assert ser.data["image"] == instance.image.url
+
+
+@override_settings(USE_S3=True)
+def test_serializer_handle_image_upload():
+    ser = ReceiptModelSerializer()
+    ser._handle_image_upload()
+    assert isinstance(ser.Meta.model.image.field.storage, PrivateMediaStorage)

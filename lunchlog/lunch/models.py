@@ -55,6 +55,3 @@ class Restaurant(Address):
     class Meta:
         verbose_name = "Restaurant"
         verbose_name_plural = "Restaurants"
-
-    def __str__(self):
-        return self.name
