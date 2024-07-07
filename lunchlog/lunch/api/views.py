@@ -6,7 +6,7 @@ from lunch.api.serializers import ReceiptModelSerializer
 from lunch.models import Receipt
 
 if TYPE_CHECKING:
-    from django.db.models.query import QuerySet
+    from django.db.models.query import QuerySet  # pragma: no cover
 
 
 class ReceiptMixin:

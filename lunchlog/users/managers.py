@@ -2,7 +2,7 @@ from typing import Any, TYPE_CHECKING
 from django.contrib.auth.models import BaseUserManager
 
 if TYPE_CHECKING:
-    from users.models import CustomUser
+    from users.models import CustomUser  # pragma: no cover
 
 
 class UserCustomManager(BaseUserManager):

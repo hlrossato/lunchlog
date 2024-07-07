@@ -15,7 +15,7 @@ from users.api.serializers import (
 from users.models import CustomUser
 
 if TYPE_CHECKING:
-    from requests import Request
+    from requests import Request  # pragma: no cover
 
 
 class UserSignUpView(CreateAPIView):

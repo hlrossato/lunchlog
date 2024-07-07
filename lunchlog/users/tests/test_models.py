@@ -14,6 +14,9 @@ def test_create_user__value_error():
     with pytest.raises(ValueError):
         CustomUser.objects.create_user(email=None, password="test")
 
+    with pytest.raises(ValueError):
+        CustomUser.objects.create_user(email="test@test.com", password=None)
+
 
 @pytest.mark.django_db
 def test_create_superuser():

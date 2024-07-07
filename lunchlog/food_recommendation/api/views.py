@@ -8,8 +8,8 @@ from food_recommendation.api.serializers import (
 from lunch.models import Restaurant
 
 if TYPE_CHECKING:
-    from requests import Request
-    from django.db.models.query import QuerySet
+    from requests import Request  # pragma: no cover
+    from django.db.models.query import QuerySet  # pragma: no cover
 
 
 class FoodRecommendationSearchFilter(filters.SearchFilter):

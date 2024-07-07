@@ -110,7 +110,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 if env.db():
     DATABASES = {"default": env.db()}
 else:
-    DATABASES = {
+    DATABASES = {  # pragma: no cover
         "default": {
             "ENGINE": env("ENGINE"),
             "NAME": env("NAME"),
@@ -180,7 +180,7 @@ STATICFILES_DIRS = (
 )
 
 USE_S3 = env("USE_S3")
-if USE_S3:
+if USE_S3:  # pragma: no cover
     # aws settings
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")

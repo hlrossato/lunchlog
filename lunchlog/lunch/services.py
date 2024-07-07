@@ -5,7 +5,7 @@ from django.db import transaction
 from google_places_api.api import GooglePlacesAPI
 
 if TYPE_CHECKING:
-    from lunch.models import Receipt
+    from lunch.models import Receipt  # pragma: no cover
 
 
 def populate_restaurant(receipt: "Receipt") -> None:
