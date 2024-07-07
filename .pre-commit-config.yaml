@@ -21,7 +21,7 @@ repos:
           --disable-error-code=import-untyped,
           --disable-error-code=attr-defined,
           --disable-error-code=misc,
-          --disable-error-code=no-untyped-def,
+          # --disable-error-code=no-untyped-def,
           --ignore-missing-imports,
           --exclude=(.*)\/test_.*.py,
 
