@@ -21,6 +21,7 @@ In order to run the project some steps must be followed. Please find the steps a
 - To build the containers, please run `make docker-build-up`
 - On another terminal tab/window, run `make migrate` so the database can be created.
 - For creating a `Django Superuser`, please run `make superuser`. You can access the Django Admin page through http://localhost:8000/admin
+- For static files, please run `make collectstatic`
 
 ## Access to the APIs
 The API can be access through the standard Django REST Framework page and the urls for it are the following:
