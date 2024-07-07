@@ -9,6 +9,10 @@ if TYPE_CHECKING:
 
 
 def populate_restaurant(receipt: "Receipt") -> None:
+    """
+    Makes a call to Google Places API and store information about the
+    searched place into the Restaurant model.
+    """
     from lunch.models import Restaurant
 
     api = GooglePlacesAPI(settings.GOOGLE_PLACES_API_KEY)

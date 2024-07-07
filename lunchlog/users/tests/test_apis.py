@@ -3,9 +3,9 @@ from rest_framework import status
 from django.urls import reverse_lazy
 from users.models import CustomUser
 
-user_sign_up_url = reverse_lazy("users:user-signup")
-user_login_url = reverse_lazy("users:user-login")
-user_logout_url = reverse_lazy("users:user-logout")
+user_sign_up_url = reverse_lazy("users:signup")
+user_login_url = reverse_lazy("users:login")
+user_logout_url = reverse_lazy("users:logout")
 
 
 @pytest.mark.django_db

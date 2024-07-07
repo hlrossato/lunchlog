@@ -10,9 +10,12 @@ class ReceiptModelSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=5, decimal_places=2)
 
     def _handle_image_upload(self: Self) -> None:
-        # Handle file upload locally
-        # I'm not sure if this is the best approach but was the one I've found
+        """
+        Handle image upload by setting S3 storage if/when USE_S3 flag is true
+        """
+
         if settings.USE_S3:
+            # I'm not sure if this is the best approach but was the one I've found
             self.Meta.model.image.field.storage = PrivateMediaStorage()
 
     def create(self: Self, validated_data: dict) -> Any:

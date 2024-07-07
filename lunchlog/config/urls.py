@@ -29,7 +29,7 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("auth/", include("users.urls")),
+    path("", include("users.urls")),
     path("receipts/", include("lunch.urls")),
     path("recommendations/", include("food_recommendation.urls")),
     # DRF-Spectacular URLs

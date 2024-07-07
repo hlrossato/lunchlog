@@ -60,4 +60,4 @@ class UserLogoutAPIView(APIView):
         self: Self, request: "Request", *args: tuple, **kwargs: dict
     ) -> HttpResponseRedirect:
         logout(request)
-        return HttpResponseRedirect(reverse("users:user-login"))
+        return HttpResponseRedirect(reverse("users:login"))

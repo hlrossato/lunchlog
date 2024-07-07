@@ -6,13 +6,6 @@ from users.models import CustomUser
 class UserAdmin(admin.ModelAdmin):
     """Admin View for User"""
 
-    list_display = ("email", "first_name")
-    # list_filter = ('',)
-    # inlines = [
-    #     Inline,
-    # ]
-    # raw_id_fields = ('',)
-    # readonly_fields = ('',)
-    # search_fields = ('',)
-    # date_hierarchy = ''
-    # ordering = ('',)
+    list_display = ("email", "first_name", "last_name", "email", "is_superuser")
+    list_filter = ("is_active", "is_superuser", "is_staff")
+    search_fields = ("email",)

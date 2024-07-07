@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+    <h1>LunchLog</h1>
+
+    <ul>
+        <li><a href={% url 'users:signup' %}>SignUp</a></li>
+        <li><a href={% url 'users:login' %}>Login</a></li>
+        <li><a href={% url 'users:logout' %}>Logout</a></li>
+        <li><a href={% url 'lunch:receipt' %}>Create Receipts</a></li>
+        <li><a href={% url 'food_recommendation:food-recommendation' %}>Food Recommendation</a></li>
+    </ul>
+{% endblock page_content %}

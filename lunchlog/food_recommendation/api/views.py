@@ -21,6 +21,7 @@ class FoodRecommendationSearchFilter(filters.SearchFilter):
         queryset: "QuerySet",
         view: "FoodRecommendationSearchFilter",
     ) -> Any:
+        # Returns empty queryset if not filtered by city
         search_terms = self.get_search_terms(request)
 
         if not search_terms:

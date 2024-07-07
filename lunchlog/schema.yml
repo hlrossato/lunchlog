@@ -158,13 +158,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SignIn'
+              $ref: '#/components/schemas/Login'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SignIn'
+              $ref: '#/components/schemas/Login'
           application/json:
             schema:
-              $ref: '#/components/schemas/SignIn'
+              $ref: '#/components/schemas/Login'
         required: true
       security:
       - basicAuth: []
@@ -175,8 +175,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignIn'
+                $ref: '#/components/schemas/Login'
           description: ''
+  /auth/logout:
+    get:
+      operationId: auth_logout_retrieve
+      tags:
+      - auth
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
   /auth/signup:
     post:
       operationId: auth_signup_create
@@ -355,6 +367,13 @@ paths:
   /recommendations/:
     get:
       operationId: recommendations_list
+      parameters:
+      - name: city
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       tags:
       - recommendations
       security:
@@ -456,6 +475,18 @@ components:
       - place_id
       - user
       - uuid
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
     PatchedReceiptModel:
       type: object
       properties:
@@ -466,13 +497,9 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
-        image_url:
-          type: string
-          readOnly: true
         image:
           type: string
           format: uri
-          writeOnly: true
         uuid:
           type: string
           format: uuid
@@ -493,13 +520,9 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
-        image_url:
-          type: string
-          readOnly: true
         image:
           type: string
           format: uri
-          writeOnly: true
         uuid:
           type: string
           format: uuid
@@ -512,23 +535,11 @@ components:
           maxLength: 250
       required:
       - date
-      - image_url
+      - image
       - price
       - restaurant_address
       - restaurant_name
       - uuid
-    SignIn:
-      type: object
-      properties:
-        email:
-          type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
-      required:
-      - email
-      - password
     SignUpModel:
       type: object
       properties:
@@ -545,7 +556,7 @@ components:
           maxLength: 150
         password:
           type: string
-          maxLength: 128
+          writeOnly: true
       required:
       - password
   securitySchemes:
