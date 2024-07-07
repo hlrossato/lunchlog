@@ -74,7 +74,7 @@ def test_find_places__empty_results(mocked_request_get):
     gpapi = GooglePlacesAPI(API_KEY)
 
     result = gpapi.find_place_id("Bla Bla Bla")
-    assert result == []
+    assert result == ""
 
 
 @mock.patch("google_places_api.api.requests.get")
@@ -86,7 +86,7 @@ def test_find_places__invalid_request(mocked_request_get):
     gpapi = GooglePlacesAPI(API_KEY)
 
     with pytest.raises(GooglePlacesException):
-        gpapi.find_place_id()
+        gpapi.find_place_id(input="")
 
 
 @mock.patch("google_places_api.api.requests.get")
@@ -125,7 +125,7 @@ def test_get_place_details__invalid_request(mocked_request_get):
     gpapi = GooglePlacesAPI(API_KEY)
 
     with pytest.raises(GooglePlacesException):
-        gpapi.place_details()
+        gpapi.place_details(place_id="")
 
 
 def test_google_places_detail__extract_address(google_place_detail):
