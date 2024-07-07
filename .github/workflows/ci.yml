@@ -33,6 +33,9 @@ jobs:
       - name: Run Ruff
         run: ruff check --select B --output-format=github .
 
+      - name: Run Mypy
+        run: mypy --disallow-untyped-calls --disallow-untyped-defs --disallow-incomplete-defs --exclude '/tests/|/migrations/|urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py' --disable-error-code=import-untyped .
+
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}

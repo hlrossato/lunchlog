@@ -1,12 +1,11 @@
 import requests
-import urllib
+from urllib.parse import urlencode
 
-from typing import Union, Self, Dict, Any
+from typing import Self, Type, Tuple
 
 from google_places_api.exceptions import GooglePlacesException
 
-
-JsonDict = Dict[str, Any]
+Response = Type[requests.models.Response]
 
 
 class GooglePlacesAPI(object):
@@ -32,7 +31,7 @@ class GooglePlacesAPI(object):
             raise GooglePlacesException("Missing API KEY")
         self._params["key"] = self._api_key
 
-    def _validate_response(self: Self, api: str, response: JsonDict) -> None:
+    def _validate_response(self: Self, api: str, response: Response) -> None:
         if response.json()["status"] not in [
             self.RESPONSE_STATUS_OK,
             self.RESPONSE_ZERO_RESULTS,
@@ -50,15 +49,15 @@ class GooglePlacesAPI(object):
                 new_value = ",".join([item for item in v])
                 v = new_value.replace(" ", "").encode("utf-8")
             encoded_data[k] = v
-        return urllib.parse.urlencode(encoded_data)
+        return urlencode(encoded_data)
 
-    def _fetch_results(self: Self, api: str, params: dict) -> Union[str, Any]:
+    def _fetch_results(self: Self, api: str, params: dict) -> Tuple[str, Response]:
         encoded_data = self._encode_data(params)
         url = api + encoded_data
         response = requests.get(url)
         return url, response
 
-    def _get_place_id(self, response: JsonDict) -> str:
+    def _get_place_id(self: Self, response: Response) -> str:
         if "candidates" not in response.json():
             return ""
 
@@ -69,7 +68,7 @@ class GooglePlacesAPI(object):
             r["place_id"] for r in response.json()["candidates"] if "place_id" in r
         ][0]
 
-    def _get_place_details(self: Self, response: JsonDict) -> "GooglePlaceDetail":
+    def _get_place_details(self: Self, response: Response) -> "GooglePlaceDetail":
         return GooglePlaceDetail(response.json()["result"])
 
     def find_place_id(self: Self, input: str, inputtype: str = "textquery") -> str:
