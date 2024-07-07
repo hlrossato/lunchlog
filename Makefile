@@ -60,7 +60,7 @@ shell_plus:
 
 tests:
 	@echo "Starting test $(TEST)"
-	@docker-compose run --workdir=$(PROJECT_PATH) app pytest $(TEST) --cov -x
+	@docker-compose run --workdir=$(PROJECT_PATH) app pytest $(TEST) --cov --cov-report term
 
 tests-cov-report:
 	@echo "Starting tests..."
