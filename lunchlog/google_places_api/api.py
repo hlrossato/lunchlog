@@ -1,12 +1,12 @@
 import requests
 import urllib
 
-from collections.abc import Iterable
-from typing import Union
+from typing import Union, Self, Dict, Any
 
 from google_places_api.exceptions import GooglePlacesException
 
-type Response[S] = Iterable[S] | int
+
+JsonDict = Dict[str, Any]
 
 
 class GooglePlacesAPI(object):
@@ -23,16 +23,16 @@ class GooglePlacesAPI(object):
     RESPONSE_NOT_FOUND = "NOT_FOUND"
     RESPONSE_REQUEST_DENIED = "REQUEST_DENIED"
 
-    def __init__(self, api_key: str = None):
+    def __init__(self: Self, api_key: str) -> None:
         self._api_key = api_key
-        self._params = {}
+        self._params: dict = {}
 
-    def _add_key_to_params(self):
+    def _add_key_to_params(self: Self) -> None:
         if self._api_key is None:
             raise GooglePlacesException("Missing API KEY")
         self._params["key"] = self._api_key
 
-    def _validate_response(self, api: str, response: Response):
+    def _validate_response(self: Self, api: str, response: JsonDict) -> None:
         if response.json()["status"] not in [
             self.RESPONSE_STATUS_OK,
             self.RESPONSE_ZERO_RESULTS,
@@ -41,7 +41,7 @@ class GooglePlacesAPI(object):
             err = ""
             raise GooglePlacesException(msg, err)
 
-    def _encode_data(self, params: dict) -> str:
+    def _encode_data(self: Self, params: dict) -> str:
         encoded_data = {}
         for k, v in params.items():
             if isinstance(v, str):
@@ -52,27 +52,27 @@ class GooglePlacesAPI(object):
             encoded_data[k] = v
         return urllib.parse.urlencode(encoded_data)
 
-    def _fetch_results(self, api: str, params: dict) -> Union[str, Response]:
+    def _fetch_results(self: Self, api: str, params: dict) -> Union[str, Any]:
         encoded_data = self._encode_data(params)
         url = api + encoded_data
         response = requests.get(url)
         return url, response
 
-    def _get_place_id(self, response: Response) -> dict:
+    def _get_place_id(self, response: JsonDict) -> str:
         if "candidates" not in response.json():
-            return []
+            return ""
 
         if len(response.json()["candidates"]) < 1:
-            return []
+            return ""
 
         return [
             r["place_id"] for r in response.json()["candidates"] if "place_id" in r
         ][0]
 
-    def _get_place_details(self, response: Response) -> dict:
+    def _get_place_details(self: Self, response: JsonDict) -> "GooglePlaceDetail":
         return GooglePlaceDetail(response.json()["result"])
 
-    def find_place_id(self, input: str = None, inputtype: str = "textquery"):
+    def find_place_id(self: Self, input: str, inputtype: str = "textquery") -> str:
         # if no fields is provided the api will return the place_id only
         self._params = {"input": input}
         self._params["inputtype"] = inputtype
@@ -84,7 +84,7 @@ class GooglePlacesAPI(object):
         self._validate_response(api, response)
         return self._get_place_id(response)
 
-    def place_details(self, place_id: str = None) -> dict:
+    def place_details(self: Self, place_id: str) -> "GooglePlaceDetail":
         self._params = {"place_id": place_id}
         self._add_key_to_params()
         api, response = self._fetch_results(
@@ -95,7 +95,9 @@ class GooglePlacesAPI(object):
 
 
 class GooglePlaceDetail(object):
-    def __init__(self, place_data):
+    """Wrapper class to seriaze"""
+
+    def __init__(self: Self, place_data: dict) -> None:
         self._data = place_data
         self.name = place_data.get("name")
         self.formatted_address = place_data.get("formatted_address")
@@ -111,7 +113,6 @@ class GooglePlaceDetail(object):
         self.opening_hours = place_data.get("opening_hours")
         self.place_id = place_data.get("place_id")
 
-        # breakpoint()
         address = self._extract_address()
         self.street_name = address.get("route")
         self.street_number = address.get("street_number")
@@ -120,7 +121,7 @@ class GooglePlaceDetail(object):
         self.country = address.get("country")
         self.postal_code = address.get("postal_code")
 
-    def _extract_address(self):
+    def _extract_address(self: Self) -> dict:
         types = [
             "street_number",
             "route",
@@ -143,7 +144,7 @@ class GooglePlaceDetail(object):
                             address[t] = long_name
         return address
 
-    def to_dict(self):
+    def to_dict(self: Self) -> dict:
         return {
             "place_id": self.place_id,
             "name": self.name,

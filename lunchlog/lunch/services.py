@@ -1,10 +1,14 @@
+from typing import TYPE_CHECKING
 from django.conf import settings
 from django.db import transaction
 
 from google_places_api.api import GooglePlacesAPI
 
+if TYPE_CHECKING:
+    from lunch.models import Receipt
 
-def populate_restaurant(receipt):
+
+def populate_restaurant(receipt: "Receipt") -> None:
     from lunch.models import Restaurant
 
     api = GooglePlacesAPI(settings.GOOGLE_PLACES_API_KEY)

@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime, timezone
+from typing import Self
 
 from django.db import models
 
@@ -7,7 +8,7 @@ from common.models import Address
 from lunch.services import populate_restaurant
 
 
-def user_directory_path(instance, filename):
+def user_directory_path(instance: "Receipt", filename: str) -> str:
     # file will be uploaded to MEDIA_ROOT/user_<id>/<date>/<filename>
     now = datetime.now(timezone.utc).date()
     return f"user_{instance.user.id}/{now.strftime("%Y/%m/%d")}/{filename}"
@@ -26,7 +27,7 @@ class Receipt(models.Model):
         verbose_name = "Receipt"
         verbose_name_plural = "Receipts"
 
-    def save(self, *args, **kwargs):
+    def save(self: Self, *args: tuple, **kwargs: dict) -> None:
         created = self.pk is None
         super().save(*args, **kwargs)
         if created:

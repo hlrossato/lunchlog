@@ -1,10 +1,32 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.5.0
+    rev: v0.5.1
     hooks:
       # Run the linter.
       - id: ruff
         args: [--fix]
       # Run the formatter.
       - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.10.1'
+    hooks:
+    -   id: mypy
+        args: [
+          # --strict,
+          --disallow-untyped-calls,
+          --disallow-untyped-defs,
+          --disallow-incomplete-defs,
+          --disable-error-code=import-untyped,
+          --disable-error-code=attr-defined,
+          --disable-error-code=misc,
+          --ignore-missing-imports,
+          # --exclude '^tests/|migrations/|urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py',
+        ]
+        exclude: |
+            (?x)^(
+                tests|
+                migrations|
+                urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
+            )$
