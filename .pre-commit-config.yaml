@@ -14,17 +14,12 @@ repos:
     hooks:
     -   id: mypy
         args: [
-          # --strict,
           --disallow-untyped-calls,
           --disallow-untyped-defs,
           --disallow-incomplete-defs,
           --disable-error-code=import-untyped,
           --disable-error-code=attr-defined,
           --disable-error-code=misc,
-          # --disable-error-code=no-untyped-def,
           --ignore-missing-imports,
-          # --exclude=(.*)\/test_.*.py,
-          # --exclude=(.*)\/migrations\/,
-          # --exclude=urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
         ]
         exclude: (.*)\/test_.*.py|(.*)\/migrations\/|urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
