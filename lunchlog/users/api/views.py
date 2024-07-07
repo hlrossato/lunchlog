@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING, Self
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -13,13 +14,18 @@ from users.api.serializers import (
 )
 from users.models import CustomUser
 
+if TYPE_CHECKING:
+    from requests import Request
+
 
 class UserSignUpView(CreateAPIView):
     model = CustomUser.objects.all()
     serializer_class = SignUpModelSerializer
     response_serializer_class = UserSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(
+        self: Self, request: "Request", *args: tuple, **kwargs: dict
+    ) -> "Response":
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -32,7 +38,9 @@ class UserLoginAPIView(APIView):
     response_serializer_class = UserSerializer
     serializer_class = LoginSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(
+        self: Self, request: "Request", *args: tuple, **kwargs: dict
+    ) -> "Response":
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -48,6 +56,8 @@ class UserLoginAPIView(APIView):
 
 
 class UserLogoutAPIView(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(
+        self: Self, request: "Request", *args: tuple, **kwargs: dict
+    ) -> HttpResponseRedirect:
         logout(request)
         return HttpResponseRedirect(reverse("users:user-login"))

@@ -17,7 +17,7 @@ class FoodRecommendationSearchFilter(filters.SearchFilter):
 
     def filter_queryset(
         self: Self,
-        request: Request,
+        request: "Request",
         queryset: "QuerySet",
         view: "FoodRecommendationSearchFilter",
     ) -> Any:

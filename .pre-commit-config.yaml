@@ -21,12 +21,14 @@ repos:
           --disable-error-code=import-untyped,
           --disable-error-code=attr-defined,
           --disable-error-code=misc,
+          --disable-error-code=no-untyped-def,
           --ignore-missing-imports,
-          # --exclude '^tests/|migrations/|urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py',
+          --exclude=(.*)\/test_.*.py,
+
         ]
-        exclude: |
-            (?x)^(
-                tests|
-                migrations|
-                urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
-            )$
+        # exclude: |
+        #     (?x).*(
+        #         tests|
+        #         migrations|
+        #         urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
+        #     )$

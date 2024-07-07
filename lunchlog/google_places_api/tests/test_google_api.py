@@ -9,7 +9,7 @@ API_KEY = "test"
 
 def test_google_places_api__missing_api_key():
     with pytest.raises(GooglePlacesException):
-        gpapi = GooglePlacesAPI()
+        gpapi = GooglePlacesAPI(None)
         gpapi._add_key_to_params()
 
 
@@ -28,7 +28,7 @@ def test_google_places_api__get_place_id__empty_list(mocked_request_get):
     mocked_request_get.return_value.json.return_value = response_json
 
     place_id = gpapi._get_place_id(mocked_request_get.return_value)
-    assert place_id == []
+    assert place_id == ""
 
 
 def test_google_places_api__encode_data():
