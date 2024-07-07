@@ -12,6 +12,10 @@ docker-ssh: docker-exec-ssh
 docker-build: docker-compose-build
 
 
+docker-build-up:
+	@echo "Building and starting up..."
+	@docker-compose up --build
+
 docker-compose-up:
 	@echo "Starting Docker..."
 	@docker-compose up
@@ -37,7 +41,7 @@ new-app:
 	@echo "Creating a new app: $(APP_NAME)"
 	@docker-compose run --workdir=$(PROJECT_PATH) app django-admin startapp $(APP_NAME)
 
-createsuperuser:
+superuser:
 	@echo "Creating Django Superuser"
 	@docker-compose run --workdir=$(PROJECT_PATH) app python manage.py createsuperuser
 

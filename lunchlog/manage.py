@@ -3,12 +3,15 @@
 
 import os
 import sys
+from loadenv import main as loadenv
 
 
 def main():
     """Run administrative tasks."""
-    # Initialize .env file with all configuration needed
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    # Initialize .env file with basic configuration needed
+    loadenv()
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

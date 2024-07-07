@@ -1,9 +1,6 @@
 @startuml "LunchLog"
 
-entity Group {}
-note top: Default Django groups
-
-entity User {
+class CustomUser {
     * id: number <<generated>>
     * uuid: UUID <<generated>>
     * email: text
@@ -11,12 +8,12 @@ entity User {
     --
     first_name: text
     last_name: text
-    receipt: FK <<Receipt>>
-    group: FK <<Group>>
+    is_active: boolean
+    is_staff: boolean
 }
 note top: This and other default Django fields
 
-entity Address {
+abstract class Address {
     * id: number <<generated>>
     * address_line_1: text
     address_line_2: text
@@ -26,13 +23,24 @@ entity Address {
     state: text
 }
 
-entity Restaurant {
+class Receipt {
     * id: number <<generated>>
     * uuid: UUID <<generated>>
+    * date: datetime
+    * price: decimal
+    * image_url: text
+    * restaurant_name: text
+    * restaurant_address: text
+    * user: FK <<CustomUser>>
+    * image: <<Image>>
+}
+
+class Restaurant {
+    * id: number <<generated>>
+    * uuid: UUID <<generated>>
+    * place_id: text
     * name: text
-    * address: FK <<Address>>
-    opening_hours: <<PlaceOpeningHoursPeriod>>
-    reviews: <<Review>>
+    formatted_address: text
     serves_beer: boolean
     serves_breakfast: boolean
     serves_brunch: boolean
@@ -41,21 +49,15 @@ entity Restaurant {
     serves_vegetarian_food: boolean
     serves_wine: boolean
     takeout: boolean
-    types: boolean
+    delivery: boolean
+    opening_hours: JSONField
+
+    receipt: FK <<Receipt>>
+    user: FK <<CustomUser>>
 }
 
-entity Receipt {
-    * id: number <<generated>>
-    * uuid: UUID <<generated>>
-    * date: datetime
-    * price: number
-    * image_url: text
-    * restaurant: FK <<Restaurant>>
-}
-
-User ||--o{ Receipt
-Receipt ||--|| Restaurant
-Restaurant ||--o{ Address
-User }o--o{ Group
+CustomUser ||--o{ Receipt
+Receipt ||--o{ Restaurant
+Address <|-- Restaurant
 
 @enduml
