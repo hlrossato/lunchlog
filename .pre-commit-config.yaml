@@ -27,4 +27,4 @@ repos:
           # --exclude=(.*)\/migrations\/,
           # --exclude=urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
         ]
-        exclude: (.*)\/test_.*.py|(.*)\/migrations\/
+        exclude: (.*)\/test_.*.py|(.*)\/migrations\/|urls.py|conftest.py|admin.py|settings.py|asgi.py|wsgi.py|manage.py|apps.py
