@@ -22,6 +22,7 @@ In order to run the project some steps must be followed. Please find the steps a
 - On another terminal tab/window, run `make migrate` so the database can be created.
 - For creating a `Django Superuser`, please run `make superuser`. You can access the Django Admin page through http://localhost:8000/admin
 - For static files, please run `make collectstatic`
+- In order for the third-party APIs to work, meaning AWS S3 and Google Places API, two flags needs to be turned on on the `.env` file. Those flags are `USE_S3` and `USE_GOOGLE_PLACES`. Set those to `True` in order to have the integrations to work.
 
 ## Access to the APIs
 The API can be access through the standard Django REST Framework page and the urls for it are the following:
