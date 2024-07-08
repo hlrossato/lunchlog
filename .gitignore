@@ -13,6 +13,7 @@ htmlcov
 .idea
 staticfiles
 mediafiles
+project_setup.py
 
 # OS
 .DS_Store
