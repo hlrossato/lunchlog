@@ -18,7 +18,15 @@ def populate_restaurant(receipt: "Receipt") -> None:
     api = GooglePlacesAPI(settings.GOOGLE_PLACES_API_KEY)
     query = f"{receipt.restaurant_name} {receipt.restaurant_address}"
 
-    with transaction.atomic():
+    if settings.USE_GOOGLE_PLACES:
         place_id = api.find_place_id(query)
         place = api.place_details(place_id)
-        Restaurant.objects.create(**place.to_dict(), receipt=receipt, user=receipt.user)
+        data = place.to_dict()
+    else:
+        data = {
+            "name": receipt.restaurant_name,
+            "formatted_address": receipt.restaurant_address,
+        }
+
+    with transaction.atomic():
+        Restaurant.objects.create(**data, receipt=receipt, user=receipt.user)

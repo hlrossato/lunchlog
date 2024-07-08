@@ -30,6 +30,7 @@ env = environ.Env(
     AWS_SECRET_ACCESS_KEY=(str, ""),
     AWS_STORAGE_BUCKET_NAME=(str, ""),
     USE_S3=(bool, False),
+    USE_GOOGLE_PLACES=(bool, False),
 )
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -219,6 +220,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+USE_GOOGLE_PLACES = env("USE_GOOGLE_PLACES")
 GOOGLE_PLACES_API_KEY = env("GOOGLE_PLACES_API_KEY")
 
 SPECTACULAR_SETTINGS = {
