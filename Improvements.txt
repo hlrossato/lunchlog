@@ -1,0 +1,25 @@
+Here's a list of things I think I could've done differently
+
+1. Indexed some fields in the models
+    1.1 - Restaurant:
+        - uuid
+        - city
+        - place_id
+    1.2 - Receipt
+        - uuid
+        - date
+    1.3 - CustomUser
+        - uuid
+        - email
+
+2. I could've used the address field also in the Receipt model but for simplicity I just used one field
+3. On `serivces.py::populate_restaurant` I could've moved lines 18 and 19 inside the IF condition
+4. I could've moved the `get_queryset` method on the `lunch/api/views.py` to the ReceiptMixin class and return the "base" queryset which
+would be `Receipt.objects.filter(user=self.request.user)`. I could possibly have created a generic `get_queryset_based_on_user`
+(or something along those lines) method that would take a `klass` param and return that queryset mentioned above.
+
+
+Podcasts
+
+Talk Python to Me
+Software Engineering Daily
